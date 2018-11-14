@@ -10,3 +10,5 @@ set -ex
     --url "$url" --dst_path 'links.json' $@
 ./extract_profiles.py \
     --src_path 'links.json' --dst_path 'profiles.json' $@
+./download_avatars.py \
+    --src_path 'profiles.json' --dst_path './avatars' $@

@@ -11,6 +11,10 @@ DEF_PAGE_LOAD_TIMEOUT = 25
 MAX_SUCCESSIVE_FAILS = 10
 
 
+def silence(*args, **kwargs):
+    pass
+
+
 def extract_profiles(driver, links, verbose=True):
     info = print if verbose else silence
     links = set(links)
