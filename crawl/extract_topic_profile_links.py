@@ -81,6 +81,11 @@ def main():
         help='url of topic'
     )
     parser.add_argument(
+        '--dst_path',
+        required=True,
+        help='path to save links .json file',
+    )
+    parser.add_argument(
         '--start_page',
         help='page number to start (1-indexed)',
         default=1,
@@ -90,11 +95,6 @@ def main():
         help='explore only these pages',
         nargs='*',
         default=None,
-    )
-    parser.add_argument(
-        '--dst_path',
-        required=True,
-        help='path to save links .json file',
     )
     parser.add_argument(
         '--webdriver_path',

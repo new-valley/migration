@@ -64,12 +64,15 @@ def main():
     )
     parser.add_argument(
         '--dst_path',
+        nargs='?',
         help='path to dir to save ({})'.format(DEF_DST_DIR_PATH),
         default=DEF_DST_DIR_PATH,
     )
     parser.add_argument(
         '--ovwrite',
+        nargs='?',
         help='overwrite file if exists',
+        const=True,
         default=False,
     )
     args = parser.parse_args()
