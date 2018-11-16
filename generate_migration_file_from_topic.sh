@@ -6,7 +6,32 @@ shift
 
 set -ex
 
-(cd ./crawl && ./crawl_topic.sh $url)
-(cd ./gen_db_data \
-    && ./gen_data_for_db_from_profiles.py --src_path ../crawl/profiles.json\
-    --dst_path $(pwd)/migration-data.json)
+webdriver_path=./crawl/chromedriver
+
+data_dir="migration_"$(date --iso-8601=seconds)
+mkdir -- "$data_dir"
+mkdir -- "$data_dir/avatars"
+mkdir -- "$data_dir/log"
+
+echo "$url" > "$data_dir/SOURCE_URL"
+
+python3 ./crawl/extract_topic_profile_links.py \
+    --url "$url" --dst_path "$data_dir/links.json" \
+    --webdriver_path "$webdriver_path" \
+    | tee "$data_dir/log/extract_topic_profile_links.log"
+
+python3 ./crawl/extract_profiles.py \
+    --src_path "$data_dir/links.json" --dst_path "$data_dir/profiles.json" \
+    --webdriver_path "$webdriver_path" \
+    | tee "$data_dir/log/extract_profiles.log"
+
+python3 ./crawl/download_avatars.py \
+    --src_path "$data_dir/profiles.json" --dst_path "$data_dir/avatars" \
+    | tee "$data_dir/log/download_avatars.log"
+
+python3 ./gen_db_data/gen_data_for_db_from_profiles.py \
+    --src_path "$data_dir/profiles.json" \
+    --dst_path "$data_dir/migration-data.json" \
+    | tee "$data_dir/log/gen_data_for_db_from_profiles.log"
+
+echo "saved everything to $data_dir"

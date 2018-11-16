@@ -9,10 +9,16 @@ import common
 DEF_WEBDRIVER_PATH = os.path.abspath('chromedriver')
 DEF_PAGE_LOAD_TIMEOUT = 25
 MAX_SUCCESSIVE_FAILS = 10
+MAX_N_RETRIES = 3
 
 
 def silence(*args, **kwargs):
     pass
+
+
+@common.retry(MAX_N_RETRIES)
+def get_profile(driver, url):
+    return pextract.get_profile(driver, url)
 
 
 def extract_profiles(driver, links, verbose=True):
@@ -23,7 +29,7 @@ def extract_profiles(driver, links, verbose=True):
     for i, url in enumerate(links):
         info('in url {}/{} "{}"'.format(i+1, len(links), url))
         try:
-            profile = pextract.get_profile(driver, url)
+            profile = get_profile(driver, url)
             data = {
                 'url': url,
                 'status': 'success',

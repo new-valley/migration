@@ -4,3 +4,4 @@ avatars/
 *.pyc
 *.pyo
 venv/
+migration_*/

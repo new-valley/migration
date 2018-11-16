@@ -6,10 +6,12 @@ import common
 
 
 DEF_WEBDRIVER_PATH = os.path.abspath('chromedriver')
-DEF_PAGE_LOAD_TIMEOUT = 25
+DEF_PAGE_LOAD_TIMEOUT = 3#25
 MAX_SUCCESSIVE_FAILS = 10
+MAX_N_RETRIES = 3
 
 
+@common.retry(MAX_N_RETRIES)
 def get_profile_links_from_topic_page(driver, url=None, verbose=True):
     common.load_page(driver, url, verbose)
     elems = driver.find_elements_by_class_name('perfil')

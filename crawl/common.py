@@ -25,3 +25,20 @@ def load_page(driver, url=None, verbose=True):
         driver.get(url)
         info('done')
     return driver
+
+def retry(max_n_times=1, verbose=True):
+    def decorator(fn):
+        def wrapper(*args, **kwargs):
+            for i in range(max_n_times):
+                try:
+                    ret = fn(*args, **kwargs)
+                    return ret
+                except Exception as e:
+                    if verbose:
+                        print('FAIL #{} @{}: "{}" - trying again'.format(
+                            i+1, fn.__name__, e))
+                    exc = e
+            else:
+                raise exc
+        return wrapper
+    return decorator
