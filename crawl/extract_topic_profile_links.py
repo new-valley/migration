@@ -6,7 +6,7 @@ import common
 
 
 DEF_WEBDRIVER_PATH = os.path.abspath('chromedriver')
-DEF_PAGE_LOAD_TIMEOUT = 3#25
+DEF_PAGE_LOAD_TIMEOUT = 25
 MAX_SUCCESSIVE_FAILS = 10
 MAX_N_RETRIES = 3
 
