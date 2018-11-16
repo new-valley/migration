@@ -5,7 +5,9 @@ import os
 import common
 
 
-DEF_WEBDRIVER_PATH = os.path.abspath('chromedriver')
+_FILE_DIR = os.path.abspath(os.path.dirname(__file__))
+DEF_WEBDRIVER_PATH = os.path.abspath(
+    os.path.join(_FILE_DIR, '..', 'data', 'chromedriver'))
 DEF_PAGE_LOAD_TIMEOUT = 25
 MAX_SUCCESSIVE_FAILS = 10
 MAX_N_RETRIES = 3

@@ -17,21 +17,21 @@ def return_none_if_fails(fn):
     return wrapper
 
 
-@return_none_if_fails
+#@return_none_if_fails
 def get_username(driver):
     elem = driver.find_element_by_class_name('userName')
     username = elem.text
     return username
 
 
-@return_none_if_fails
+#@return_none_if_fails
 def get_registration_year(driver):
     elem = driver.find_element_by_class_name('points-year')
     year = int(elem.get_attribute('innerHTML'))
     return year
 
 
-@return_none_if_fails
+#@return_none_if_fails
 def get_registration_day_month(driver):
     elem = driver.find_element_by_class_name('points-day-month')
     day, month = elem.get_attribute('innerHTML').split()
@@ -39,7 +39,7 @@ def get_registration_day_month(driver):
     return day, month
 
 
-@return_none_if_fails
+#@return_none_if_fails
 def get_avatar_url(driver):
     elem = driver.find_element_by_class_name('avatarImg')
     url = elem.get_attribute('src')
@@ -72,14 +72,14 @@ def get_n_topics(driver):
     return n_topics
 
 
-@return_none_if_fails
+#@return_none_if_fails
 def get_level(driver):
     elem = driver.find_element_by_class_name('condecoration-level')
     level = int(elem.text.split()[-1].strip())
     return level
 
 
-@return_none_if_fails
+#@return_none_if_fails
 def get_registration_date(driver):
     year = get_registration_year(driver)
     day, month = get_registration_day_month(driver)

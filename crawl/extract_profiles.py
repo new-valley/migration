@@ -6,7 +6,9 @@ import pextract
 import common
 
 
-DEF_WEBDRIVER_PATH = os.path.abspath('chromedriver')
+_FILE_DIR = os.path.abspath(os.path.dirname(__file__))
+DEF_WEBDRIVER_PATH = os.path.abspath(
+    os.path.join(_FILE_DIR, '..', 'data', 'chromedriver'))
 DEF_PAGE_LOAD_TIMEOUT = 25
 MAX_SUCCESSIVE_FAILS = 10
 MAX_N_RETRIES = 3
@@ -27,7 +29,7 @@ def extract_profiles(driver, links, verbose=True):
     fail_count = 0
     extract_profiles = []
     for i, url in enumerate(links):
-        info('in url {}/{} "{}"'.format(i+1, len(links), url))
+        info('in url {}/{} "{}"'.format(i+1, len(links), url), flush=True)
         try:
             profile = get_profile(driver, url)
             data = {
