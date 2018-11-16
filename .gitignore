@@ -5,3 +5,4 @@ avatars/
 *.pyo
 venv/
 migration_*/
+*.json
