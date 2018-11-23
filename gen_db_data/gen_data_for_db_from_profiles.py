@@ -36,28 +36,6 @@ DEFAULT_SUBFORUM = {
 }
 
 
-def get_dummy_post(user_id, topic_id):
-    return {
-        'post_id': get_rand_id(),
-        'user_id': user_id,
-        'topic_id': topic_id,
-        'content': '',
-        'status': 'unpublished',
-        'created_at': DEF_CREATION_DATE.isoformat(),
-    }
-
-
-def get_dummy_topic(user_id):
-    return {
-        'topic_id': get_rand_id(),
-        'user_id': user_id,
-        'subforum_id': DEFAULT_SUBFORUM['subforum_id'],
-        'title': '',
-        'status': 'unpublished',
-        'created_at': DEF_CREATION_DATE.isoformat(),
-    }
-
-
 def get_avatar_category(url):
     return url.split('/')[-2].split('%')[0].lower()
 
@@ -76,7 +54,7 @@ def get_datetime_from_date_str(date_str):
     return dt.datetime(int(year), int(month), int(day), tzinfo=dt.timezone.utc)
 
 
-def get_user(username, registration_date, avatar_id):
+def get_user(username, registration_date, avatar_id, n_topics, n_posts):
     return {
         'user_id': get_rand_id(),
         'avatar_id': avatar_id,
@@ -86,6 +64,8 @@ def get_user(username, registration_date, avatar_id):
         'created_at': get_datetime_from_date_str(registration_date).isoformat(),
         'roles': 'user',
         'status': 'active',
+        'n_topics': n_topics,
+        'n_posts': n_posts,
         'signature': 'usuário migrado, abraços',
     }
 
@@ -106,19 +86,11 @@ def get_data(profiles):
         user = get_user(
             username=prof['username'],
             registration_date=prof['registration_date'],
-            avatar_id=avatars[prof['avatar_url']]['avatar_id']
+            avatar_id=avatars[prof['avatar_url']]['avatar_id'],
+            n_topics=prof['n_topics'],
+            n_posts=prof['n_posts'],
         )
         users.append(user)
-        #creating dummy topics and posts
-        for i in range(prof['n_topics']):
-            topics.append(get_dummy_topic(
-                user_id=user['user_id']
-            ))
-        for i in range(prof['n_posts']):
-            posts.append(get_dummy_post(
-                user_id=user['user_id'],
-                topic_id=random.choice(topics)['topic_id'],
-            ))
     print()
     avatars = list(avatars.values())
     return {
