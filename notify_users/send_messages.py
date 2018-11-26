@@ -49,6 +49,7 @@ def check_messages_numbers_and_delete_if_needed(
             else:
                 raise NoMessageSpaceLeft('could not free up messages space')
 
+
 def _send_messages(user, messages):
     infos = []
     for i, msg in enumerate(messages):
