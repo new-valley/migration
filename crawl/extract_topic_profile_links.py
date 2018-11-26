@@ -92,6 +92,7 @@ def main():
     parser.add_argument(
         '--start_page',
         help='page number to start (1-indexed)',
+        type=int,
         default=1,
     )
     parser.add_argument(

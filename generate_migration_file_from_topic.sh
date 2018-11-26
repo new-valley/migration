@@ -17,7 +17,7 @@ echo "$url" > "$data_dir/SOURCE_URL"
 
 stdbuf -i0 -o0 -e0 python3 ./crawl/extract_topic_profile_links.py \
     --url "$url" --dst_path "$data_dir/links.json" \
-    --webdriver_path "$webdriver_path" \
+    --webdriver_path "$webdriver_path" $@ \
     | tee "$data_dir/log/extract_topic_profile_links.log"
 
 stdbuf -i0 -o0 -e0 python3 ./crawl/extract_profiles.py \

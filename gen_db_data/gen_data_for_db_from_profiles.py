@@ -27,13 +27,13 @@ def get_rand_id():
     return random.randint(0, 10**18)
 
 
-DEFAULT_SUBFORUM = {
-    'subforum_id': get_rand_id(),
-    'title': 'limbo',
-    'description': 'rip',
-    'position': 666666,
-    'created_at': DEF_CREATION_DATE.isoformat(),
-}
+#DEFAULT_SUBFORUM = {
+#    'subforum_id': get_rand_id(),
+#    'title': 'limbo',
+#    'description': 'rip',
+#    'position': 666666,
+#    'created_at': DEF_CREATION_DATE.isoformat(),
+#}
 
 
 def get_avatar_category(url):
@@ -73,7 +73,7 @@ def get_user(username, registration_date, avatar_id, n_topics, n_posts):
 def get_data(profiles):
     avatars = {}
     users = []
-    subforums = [DEFAULT_SUBFORUM]
+    subforums = []
     topics = []
     posts = []
     for i, prof in enumerate(profiles):

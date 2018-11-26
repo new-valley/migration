@@ -6,3 +6,4 @@ avatars/
 venv/
 migration_*/
 *.json
+*.csv
