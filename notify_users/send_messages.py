@@ -30,20 +30,49 @@ def send_message(user, recipient, subject, message):
     user.send_message(recipient, subject, message)
 
 
+class NoMessageSpaceLeft(Exception):
+    pass
+
+
+def check_messages_numbers_and_delete_if_needed(
+        user, min_space=1, try_inbox=False):
+    n_msgs_used, n_msgs_limit = user.get_messages_numbers()
+    if n_msgs_limit - n_msgs_used < min_space:
+        #trying to free up space first in outbox
+        print('\tlimit messages reached, deleting outbox messages')
+        user.delete_all_outbox_messages()
+        n_msgs_used, n_msgs_limit = user.get_messages_numbers()
+        if n_msgs_limit - n_msgs_used < min_space:
+            if try_inbox:
+                print('\tlimit messages reached, deleting inbox messages')
+                user.delete_all_inbox_messages()
+            else:
+                raise NoMessageSpaceLeft('could not free up messages space')
+
 def _send_messages(user, messages):
     infos = []
     for i, msg in enumerate(messages):
-        info = {
-            'message': msg,
-            'status': 'success',
-        }
         print('in message {}/{}'.format(i+1, len(messages)))
         print('\tto: {} | subject: {}'.format(
             msg['recipient'], msg['subject']))
-        send_message(user, msg['recipient'], msg['subject'], msg['message'])
-        if not user.success_sending_message():
-            print('\tERROR sending message')
+        info = {
+            'message': msg,
+            'status': 'success',
+            'status_message': 'message sent'
+        }
+        try:
+            check_messages_numbers_and_delete_if_needed(user, min_space=3)
+            send_message(user, msg['recipient'], msg['subject'], msg['message'])
+            if not user.success_sending_message():
+                print('\tERROR: no success sending message')
+                info['status'] = 'fail'
+                info['status_message'] = 'no success sending message'
+        except NoMessageSpaceLeft:
+            raise
+        except Exception as e:
+            print('\tERROR: {}'.format(e))
             info['status'] = 'fail'
+            info['status_message'] = str(e)
         infos.append(info)
     return infos
 

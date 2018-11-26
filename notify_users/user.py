@@ -199,7 +199,7 @@ def delete_all_outbox_checked_messages(driver_at_outbox):
         return
     elem = get_delete_checked_messages_elem(driver_at_outbox)
     click(elem)
-    elem = get_confirm_deletion_outbox_messages_elem(driver_at_outbox)
+    elem = get_confirm_deletion_checked_outbox_messages_elem(driver_at_outbox)
     click(elem)
 
 
@@ -213,7 +213,7 @@ def delete_all_inbox_checked_messages(driver_at_inbox):
         return
     elem = get_delete_checked_messages_elem(driver_at_inbox)
     click(elem)
-    elem = get_confirm_deletion_inbox_messages_elem(driver_at_inbox)
+    elem = get_confirm_deletion_checked_inbox_messages_elem(driver_at_inbox)
     click(elem)
 
 

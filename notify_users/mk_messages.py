@@ -8,7 +8,7 @@ import user as u
 
 
 DEF_DST_PATH = './messages.json'
-FORUM_LINK = 'www.newvallwy.org'
+FORUM_LINK = 'http://newvalley.xyz'
 
 
 def save_json(path, data):
@@ -28,9 +28,12 @@ def mk_message_body(username, password, email):
         'sou da equipe de desenvolvimento do novo fórum New Valley',
         'criamos uma conta para você no novo fórum com esse seu username.',
         '',
-        'pra fazer login, entre em {} e use as credenciais:'.format(FORUM_LINK),
-        'email: {}'.format(email),
-        'senha: {}'.format(password),
+        'pra fazer login:',
+        '- entre em {}'.format(FORUM_LINK),
+        '- no menu no canto superior direito, clique em "ENTRAR" '
+            'e use as credenciais:',
+        '-- email: {}'.format(email),
+        '-- senha: {}'.format(password),
         '',
         'voce vai poder (e deve) mudar seu email e senha quando entrar.',
         'ABRAÇOS',
@@ -49,7 +52,6 @@ def mk_message(username, password, email):
 def mk_messages(src_path, dst_path):
     #assumes its JSON output of gen_data_for_db_from_profiles
     users = load_json(src_path)['users']
-    users = [u for u in users if u['username'] == 'Miss Twat']
 
     msgs = []
     for user in users:
