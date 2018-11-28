@@ -50,9 +50,10 @@ def check_messages_numbers_and_delete_if_needed(
                 raise NoMessageSpaceLeft('could not free up messages space')
 
 
-def _send_messages(user, messages):
+def _send_messages(user, messages, start=0):
     infos = []
-    for i, msg in enumerate(messages):
+    for i in range(start, len(messages)):
+        msg = messages[i]
         print('in message {}/{}'.format(i+1, len(messages)))
         print('\tto: {} | subject: {}'.format(
             msg['recipient'], msg['subject']))
@@ -79,7 +80,7 @@ def _send_messages(user, messages):
 
 
 def send_messages(email, password, src_path, dst_path, webdriver_path,
-        del_messages=False):
+        del_messages=False, start_from=1):
     #assumes message is a JSON file in format of a list of dicts in format
     # recipient: "username",
     # subject: "subject",
@@ -95,15 +96,16 @@ def send_messages(email, password, src_path, dst_path, webdriver_path,
     used, limit = user.get_messages_numbers()
     n_messages_left = limit - used
     print('{} messages to send, {} left in in user space'.format(
-        len(messages), n_messages_left))
-    if len(messages) > n_messages_left:
+        len(messages) - start_from, n_messages_left))
+    if len(messages) - start_from > n_messages_left:
         if not del_messages:
             print('ERROR: it would be necessary to delete messages'
                 'but del_messages param is set to False')
+            return
         else:
             print('WARNING: it will be necessary to delete some messages')
 
-    infos = _send_messages(user, messages)
+    infos = _send_messages(user, messages, start_from-1)
     save_json(dst_path, infos)
     print('saved infos to "{}"'.format(dst_path))
 
@@ -143,6 +145,12 @@ def main():
         nargs='?',
         const=True,
     )
+    parser.add_argument(
+        '--start_from',
+        help='start from this message (1-indexed)',
+        default=1,
+        type=int,
+    )
     args = parser.parse_args()
 
     send_messages(
@@ -152,6 +160,7 @@ def main():
         dst_path=args.dst_path,
         webdriver_path=args.webdriver_path,
         del_messages=args.del_messages_if_needed,
+        start_from=args.start_from,
     )
 
 

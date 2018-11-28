@@ -9,6 +9,7 @@ import user as u
 
 DEF_DST_PATH = './messages.json'
 FORUM_LINK = 'http://newvalley.xyz'
+ALT_FORUM_LINK = 'http://ec2-18-231-167-148.sa-east-1.compute.amazonaws.com'
 
 
 def save_json(path, data):
@@ -23,13 +24,15 @@ def load_json(path):
 
 
 def mk_message_body(username, password, email):
+    forum_links = FORUM_LINK \
+        + (ALT_FORUM_LINK is not None)*(' (ou {})'.format(ALT_FORUM_LINK))
     lines = [
         'olar {}!'.format(username),
         'sou da equipe de desenvolvimento do novo fórum New Valley',
         'criamos uma conta para você no novo fórum com esse seu username.',
         '',
         'pra fazer login:',
-        '- entre em {}'.format(FORUM_LINK),
+        '- entre em {}'.format(forum_links),
         '- no menu no canto superior direito, clique em "ENTRAR" '
             'e use as credenciais:',
         '-- email: {}'.format(email),

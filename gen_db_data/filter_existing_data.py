@@ -29,8 +29,17 @@ def get_all_users():
     return users
 
 
-def filter_existing_users(src_path, dst_path):
+def get_all_avatars():
+    resp = requests.get('{}/avatars?max_n_results=999999'.format(API_URL))
+    assert resp.status_code == 200
+    assert resp.json()['total'] <= 999999
+    avatars = resp.json()['data']
+    return avatars
+
+
+def filter_existing_data(src_path, dst_path):
     migration_data = load_json(src_path)
+    #users
     all_users = get_all_users()
     usernames = {u['username'] for u in all_users}
     old_n_users = len(migration_data['users'])
@@ -38,6 +47,15 @@ def filter_existing_users(src_path, dst_path):
         u for u in migration_data['users'] if u['username'] not in usernames]
     print('filtered from {} to {} users using {} existing usernames'.format(
         old_n_users, len(migration_data['users']), len(usernames)))
+    #avatars
+    all_avatars = get_all_avatars()
+    avatar_ids = {a['avatar_id'] for a in all_avatars}
+    old_n_avatars = len(migration_data['avatars'])
+    migration_data['avatars'] = [\
+        a for a in migration_data['avatars'] \
+            if str(a['avatar_id']) not in avatar_ids]
+    print('filtered from {} to {} avatars using {} existing avatar_ids'.format(
+        old_n_avatars, len(migration_data['avatars']), len(avatar_ids)))
 
     save_json(dst_path, migration_data)
     print('saved to', dst_path)
@@ -58,7 +76,7 @@ def main():
     )
     args = parser.parse_args()
 
-    filter_existing_users(
+    filter_existing_data(
         src_path=args.src_path,
         dst_path=args.dst_path
     )
